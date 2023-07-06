@@ -21,8 +21,8 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableWebSecurity
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
-    private UserDetailsService userDetailsService;
-    private JwtConfiguration jwtConfiguration;
+    private final UserDetailsService userDetailsService;
+    private final JwtConfiguration jwtConfiguration;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -33,7 +33,7 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling().authenticationEntryPoint((req, resp, e) -> resp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
                 .and()
-                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter())
+                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfiguration))
                 .authorizeRequests().antMatchers(jwtConfiguration.getLoginUrl()).permitAll()
                 .antMatchers("/course/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated();

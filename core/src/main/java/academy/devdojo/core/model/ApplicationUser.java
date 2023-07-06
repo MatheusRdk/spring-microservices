@@ -24,6 +24,7 @@ public class ApplicationUser implements AbstractEntity{
     private String username;
     @NotNull(message = "The field 'password' is mandatory")
     @Column(nullable = false)
+    @ToString.Exclude   //Assim ele nao vai para os logs
     private String password;
     @NotNull(message = "The field 'role' is mandatory")
     @Column(nullable = false)
